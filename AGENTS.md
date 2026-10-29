@@ -32,3 +32,7 @@ Geolocalização, fotos, assinaturas, dados de colaboradores e de clientes deman
 Evite acoplar a API a uma interface específica. Contratos devem permitir o funcionamento offline do app do inspetor, incluindo envio posterior e seguro dos dados coletados. Não introduza serviços pagos de terceiros em funcionalidades centrais, sobretudo na geração de PDF.
 
 O repositório está em estado inicial: não presuma modelo de dados, endpoints, ferramenta de migração ou padrões internos antes de eles existirem e serem documentados.
+
+## Estado atual (protótipo do MVP)
+
+Já existem e estão documentados em `docs/` e `README.md`: Spring Boot 3.5 / Java 21, Flyway (`V1__init.sql`), JWT HS256, contratos REST em `docs/api.md`, perfil `local` (H2) e Docker Compose (PostgreSQL). Este repositório agora tem convenções reais: DTOs em `web/dto` (nunca entidades), regras em `InspectionService`, migrações novas `V<n>__*.sql` (nunca editar a V1) e todo comportamento novo acompanhado de teste em `InspectionFlowTest` e de atualização de `docs/api.md`. Seguem sem definição: regras de negócio além das listadas em `docs/overview.md`, PDF, CRUD de cadastros e notificações.

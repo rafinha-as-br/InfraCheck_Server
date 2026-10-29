@@ -1,0 +1,43 @@
+spring:
+  application:
+    name: infracheck-server
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/infracheck}
+    username: ${DB_USER:infracheck}
+    password: ${DB_PASSWORD:infracheck}
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate          # o esquema é responsabilidade do Flyway
+    properties:
+      hibernate:
+        default_batch_fetch_size: 50
+  flyway:
+    enabled: true
+  servlet:
+    multipart:
+      max-file-size: 15MB
+      max-request-size: 20MB
+
+server:
+  port: ${PORT:8080}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+
+infracheck:
+  timezone: America/Sao_Paulo      # define o "hoje" das regras de atraso e da carga diária
+  security:
+    # Segredo HS256 (mínimo 32 caracteres). Sem valor padrão de propósito: em produção vem do ambiente.
+    jwt-secret: ${INFRACHECK_JWT_SECRET:}
+    token-ttl: 24h
+  storage:
+    path: ${INFRACHECK_STORAGE_PATH:./data/storage}   # fotos e assinaturas (dados sensíveis, LGPD)
+  cors:
+    allowed-origin-patterns:
+      - "http://localhost:*"
+      - "http://127.0.0.1:*"
+  seed: false                      # popula dados de demonstração quando o banco está vazio

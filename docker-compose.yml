@@ -1,0 +1,37 @@
+# API + PostgreSQL para desenvolvimento.   docker compose up --build
+# O perfil "dev-seed" abaixo habilita os dados de demonstração (NUNCA em produção).
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: infracheck
+      POSTGRES_USER: infracheck
+      POSTGRES_PASSWORD: infracheck
+    ports:
+      - "5432:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U infracheck -d infracheck"]
+      interval: 5s
+      retries: 10
+
+  api:
+    build: .
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DB_URL: jdbc:postgresql://db:5432/infracheck
+      DB_USER: infracheck
+      DB_PASSWORD: infracheck
+      INFRACHECK_JWT_SECRET: dev-only-secret-change-me-dev-only-secret-change-me
+      INFRACHECK_SEED: "true"
+    ports:
+      - "8080:8080"
+    volumes:
+      - api-data:/data
+
+volumes:
+  db-data:
+  api-data:
